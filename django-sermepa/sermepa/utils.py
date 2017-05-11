@@ -54,7 +54,7 @@ def redsys_check_response(Ds_Signature, Ds_MerchantParameters):
 """
 def encode_parameters(merchant_parameters):
     parameters = (json.dumps(merchant_parameters)).encode()
-    return ''.join(unicode(base64.encodestring(parameters), 'utf-8').splitlines())
+    return base64.b64encode(parameters)
 
 
 
@@ -81,7 +81,7 @@ def decode_parameters(Ds_MerchantParameters):
 """
 def encrypt_order_with_3DES(Ds_Merchant_Order):
     pycrypto = DES3.new(base64.standard_b64decode(settings.SERMEPA_SECRET_KEY), DES3.MODE_CBC, IV=b'\0\0\0\0\0\0\0\0')
-    order_padded = Ds_Merchant_Order.ljust(16, b'\0')
+    order_padded = Ds_Merchant_Order.ljust(16, '\0')
     return pycrypto.encrypt(order_padded)
 
 
